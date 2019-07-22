@@ -1,0 +1,12 @@
+{
+  "name": "Chrome-watcher-and-url-caller",
+  "version": "0.0.1",
+  "description": "",
+  "author": "David Bonting",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "*",
+    "gulp": "3.9.1",
+    "gulp-watch": "*"
+  }
+}
