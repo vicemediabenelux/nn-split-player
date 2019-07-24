@@ -27,6 +27,9 @@ body {
 .right {
     background-color: green;
     clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+    transition-property: clip-path;
+    transition-timing-function: ease-out;
+    transition-delay: 0s;
 }
 
 .video-js .vjs-control-bar, .video-js .vjs-big-play-button {
