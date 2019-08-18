@@ -18,6 +18,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+    /* pointer-events: none; */
+}
+
+.side.right {
     pointer-events: none;
 }
 
@@ -33,7 +37,13 @@ body {
     transition-delay: 0s;
 }
 
-.video-js .vjs-control-bar,
-.video-js .vjs-big-play-button {
+#rightvideo .vjs-control-bar,
+#rightvideo .vjs-big-play-button {
     display: none !important;
+}
+
+#leftvideo .vjs-control-bar,
+#leftvideo .vjs-big-play-button {
+    z-index: 1000;
+    position: absolute;
 }

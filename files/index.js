@@ -32,9 +32,34 @@ document.getElementsByClassName('wrapper')[0].addEventListener('click', function
         rightplayer.play();
         playing = true;
 
+        // handle animation each second
         leftplayer.on('timeupdate', function() {
             handleAnimatedPoints(this.currentTime());
-        })
+
+            // if player is 0.4s out of sync. Correct it
+            console.log(leftplayer.currentTime() - rightplayer.currentTime());
+
+            if(((leftplayer.currentTime() - rightplayer.currentTime()) >= 0.125) || (leftplayer.currentTime() - rightplayer.currentTime()) <= -0.125){
+                console.log('corectie');
+                rightplayer.currentTime(this.currentTime());
+            }
+        });
+
+        // handle seeking of player 1
+        leftplayer.on('seeking', function() {
+            rightplayer.pause();
+        });
+
+        // adjust player 2 to seeking of player 1
+        leftplayer.on('seeked', function() {
+            rightplayer.currentTime(this.currentTime());
+            rightplayer.play();
+        });
+
+        // always adjust player after pause
+        leftplayer.on('pause', function() {
+            rightplayer.currentTime(this.currentTime());
+        });
     } else {
         leftplayer.pause();
         rightplayer.pause();
@@ -65,7 +90,6 @@ document.getElementsByClassName('wrapper')[0].addEventListener('mousemove', func
 
 // reset on leave
 document.getElementsByClassName('wrapper')[0].addEventListener("mouseleave", setClipPath);
-document.getElementsByClassName('wrapper')[0].addEventListener("mouseout", setClipPath);
 
 function setClipPath(percentageHover) {
     if (percentageHover.target) {
