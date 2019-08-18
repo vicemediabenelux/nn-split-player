@@ -1,21 +1,11 @@
-// var pointers = [
-//     [0, 10],
-//     [3, 60],
-//     [4, 60],
-//     [5, 70],
-//     [6, 70],
-//     [9, 20],
-//     [10, 20],
-// ];
-
 var pointers = [
-    [0, 20],
+    [0, 10],
     [3, 60],
-    [4, 40],
-    [5, 60],
-    [6, 40],
-    [9, 60],
-    [10, 40],
+    [4, 60],
+    [5, 70],
+    [6, 70],
+    [9, 20],
+    [10, 20],
 ];
 
 var leftplayer = undefined;
@@ -130,27 +120,27 @@ document.getElementsByClassName('wrapper')[0].addEventListener('mousemove', func
     }
 });
 
-// document.getElementsByClassName('wrapper')[0].addEventListener('touchmove', function(e) {
-//     if(device!='desktop'){
-//         mouseOver = true;
+document.getElementsByClassName('wrapper')[0].addEventListener('touchmove', function(e) {
+    if(device!='desktop'){
+        mouseOver = true;
 
-//         // disable animation
-//         rightElement = document.getElementsByClassName('right')[0];
-//         rightElement.style.transitionDuration = '0s';
+        // disable animation
+        rightElement = document.getElementsByClassName('right')[0];
+        rightElement.style.transitionDuration = '0s';
     
-//         // calculate clip position
-//         elementWidth = this.offsetWidth;
-//         pxHover = e.touches[0].pageX - this.offsetLeft;
-//         percentageHover = (pxHover / elementWidth) * 100;
+        // calculate clip position
+        elementWidth = this.offsetWidth;
+        pxHover = e.touches[0].pageX - this.offsetLeft;
+        percentageHover = (pxHover / elementWidth) * 100;
     
-//         // fix ugly last bit
-//         if (percentageHover >= 99.5) {
-//             percentageHover = 100;
-//         }
+        // fix ugly last bit
+        if (percentageHover >= 99.5) {
+            percentageHover = 100;
+        }
     
-//         setClipPath(percentageHover);
-//     }
-// });
+        setClipPath(percentageHover);
+    }
+});
 
 // reset on leave
 document.getElementsByClassName('wrapper')[0].addEventListener("mouseleave", setClipPath);
