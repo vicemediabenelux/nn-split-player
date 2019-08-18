@@ -37,10 +37,7 @@ document.getElementsByClassName('wrapper')[0].addEventListener('click', function
             handleAnimatedPoints(this.currentTime());
 
             // if player is 0.4s out of sync. Correct it
-            console.log(leftplayer.currentTime() - rightplayer.currentTime());
-
             if(((leftplayer.currentTime() - rightplayer.currentTime()) >= 0.125) || (leftplayer.currentTime() - rightplayer.currentTime()) <= -0.125){
-                console.log('corectie');
                 rightplayer.currentTime(this.currentTime());
             }
         });
