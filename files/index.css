@@ -8,7 +8,6 @@ body {
     position: relative;
     width: 100%;
     padding-top: 56.25%;
-    /* 16:9 Aspect Ratio */
     background-color: grey;
 }
 
@@ -18,7 +17,6 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    /* pointer-events: none; */
 }
 
 .side.right {
@@ -31,10 +29,19 @@ body {
 
 .right {
     background-color: green;
+
     clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+    -webkit-clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
+
     transition-property: clip-path;
     transition-timing-function: ease-out;
     transition-delay: 0s;
+    transition-duration: 0s;
+
+    -webkit-clip-transition-property: -webkit-clip-path;
+    -webkit-clip-transition-timing-function: ease-out;
+    -webkit-clip-transition-delay: 0s;
+    -webkit-clip-transition-duration: 0s;
 }
 
 #rightvideo .vjs-control-bar,
@@ -46,4 +53,8 @@ body {
 #leftvideo .vjs-big-play-button {
     z-index: 1000;
     position: absolute;
+}
+
+#leftvideo .vjs-picture-in-picture-control {
+    display: none !important;
 }
