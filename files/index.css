@@ -11,7 +11,7 @@ body {
     background-color: grey;
 }
 
-.side {
+#vice-split-player-nn .side {
     position: absolute;
     top: 0;
     left: 0;
@@ -19,15 +19,15 @@ body {
     height: 100%;
 }
 
-.side.right {
+#vice-split-player-nn .side.right {
     pointer-events: none;
 }
 
-.left {
+#vice-split-player-nn .left {
     background-color: red;
 }
 
-.right {
+#vice-split-player-nn .right {
     background-color: green;
 
     clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
@@ -44,17 +44,17 @@ body {
     -webkit-clip-transition-duration: 0s;
 }
 
-#rightvideo .vjs-control-bar,
-#rightvideo .vjs-big-play-button {
+#vice-split-player-nn #rightvideo .vjs-control-bar,
+#vice-split-player-nn #rightvideo .vjs-big-play-button {
     display: none !important;
 }
 
-#leftvideo .vjs-control-bar,
-#leftvideo .vjs-big-play-button {
+#vice-split-player-nn #leftvideo .vjs-control-bar,
+#vice-split-player-nn #leftvideo .vjs-big-play-button {
     z-index: 1000;
     position: absolute;
 }
 
-#leftvideo .vjs-picture-in-picture-control {
+#vice-split-player-nn #leftvideo .vjs-picture-in-picture-control {
     display: none !important;
 }
