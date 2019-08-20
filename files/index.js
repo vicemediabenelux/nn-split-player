@@ -17,6 +17,7 @@
     var device = detectDevice();
     var outOfSyncCorrection = false;
     var dragging = false;
+    var videoPlayerSize = 0;
 
     document.addEventListener("DOMContentLoaded", function(event) {
         videojs.getPlayer('leftvideo').ready(function() {
@@ -26,6 +27,13 @@
         videojs.getPlayer('rightvideo').ready(function() {
             rightplayer = this;
         });
+
+        // set player width's / overflows
+        videoPlayerSize = document.getElementById('vice-split-player-nn').clientWidth;
+        document.getElementsByClassName('leftOverflow')[0].style.width = videoPlayerSize + 'px';
+        document.getElementsByClassName('rightOverflow')[0].style.width = videoPlayerSize + 'px';
+        document.getElementsByClassName('leftFrame')[0].style.width = videoPlayerSize + 'px';
+        document.getElementsByClassName('rightFrame')[0].style.width = (videoPlayerSize / 2) + 'px';
     });
 
     // handle click
@@ -103,7 +111,7 @@
             mouseOver = true;
 
             // disable animation
-            rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
+            rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
             rightElement.style.transitionDuration = '0s';
         
             // calculate clip position
@@ -125,7 +133,7 @@
             mouseOver = true;
 
             // disable animation
-            rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
+            rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
             rightElement.style.transitionDuration = '0s';
         
             // calculate clip position
@@ -144,6 +152,7 @@
 
     // reset on leave
     document.getElementById('vice-split-player-nn').addEventListener("mouseleave", setClipPath);
+    document.getElementById('vice-split-player-nn').addEventListener("touchend", setClipPath);
 
     function setClipPath(percentageHover) {
         if (percentageHover.target) {
@@ -153,9 +162,8 @@
         }
 
         
-        rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
-        rightElement.style.clipPath = 'polygon(0 0, ' + percentageHover + '% 0, ' + percentageHover + '% 100%, 0% 100%)';
-        rightElement.style.webkitClipPath = 'polygon(0 0, ' + percentageHover + '% 0, ' + percentageHover + '% 100%, 0% 100%)';
+        rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
+        rightElement.style.width = videoPlayerSize * (percentageHover / 100) + 'px';
     }
 
 
@@ -164,9 +172,8 @@
         pointers.forEach(function(pointer, key) {
             if (pointer[0] === seconds && !mouseOver && pointers[key + 1] !== undefined){
                 timeToAnimate = pointers[key + 1][0] - pointer[0];
-                rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
+                rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
                 rightElement.style.transitionDuration = timeToAnimate + 's';
-                rightElement.style.webkitTransitionDuration = timeToAnimate + 's';
                 setClipPath(pointer[1]);
                 lastPoint = seconds;
             }

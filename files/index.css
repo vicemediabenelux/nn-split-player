@@ -3,7 +3,7 @@ body {
     margin: 50px auto 0px auto;
 }
 
-.wrapper {
+#vice-split-player-nn {
     width: 100%;
     position: relative;
     width: 100%;
@@ -23,25 +23,15 @@ body {
     pointer-events: none;
 }
 
-#vice-split-player-nn .left {
-    background-color: red;
-}
+#vice-split-player-nn .rightFrame, #vice-split-player-nn .leftFrame{
+    overflow: hidden;
 
-#vice-split-player-nn .right {
-    background-color: green;
-
-    clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
-    -webkit-clip-path: polygon(0 0, 50% 0, 50% 100%, 0% 100%);
-
-    transition-property: clip-path;
+    transition-property: width;
     transition-timing-function: ease-out;
     transition-delay: 0s;
     transition-duration: 0s;
 
-    -webkit-clip-transition-property: -webkit-clip-path;
-    -webkit-clip-transition-timing-function: ease-out;
-    -webkit-clip-transition-delay: 0s;
-    -webkit-clip-transition-duration: 0s;
+
 }
 
 #vice-split-player-nn #rightvideo .vjs-control-bar,
