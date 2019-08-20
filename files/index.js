@@ -26,6 +26,29 @@
         videojs.getPlayer('rightvideo').ready(function() {
             rightplayer = this;
         });
+
+
+        var vLeft = document.getElementById('leftvideo_html5_api');
+        var vRight = document.getElementById('rightvideo_html5_api');
+        var canvasLeft = document.getElementById('vice-split-player-nn-canvas-left');
+        var canvasRight = document.getElementById('vice-split-player-nn-canvas-right');
+        var contextLeft = canvasLeft.getContext('2d');
+        var contextRight = canvasRight.getContext('2d');
+    
+        var cw = 600;
+        var ch = 337;
+        canvasLeft.width = cw;
+        canvasLeft.height = ch;
+        canvasRight.width = cw;
+        canvasRight.height = ch;
+
+        vLeft.addEventListener('play', function(){
+            draw(this,contextLeft,cw,ch);
+        },false);
+
+        vRight.addEventListener('play', function(){
+            draw(this,contextRight,cw,ch);
+        },false);
     });
 
     // handle click
@@ -103,8 +126,11 @@
             mouseOver = true;
 
             // disable animation
-            rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
-            rightElement.style.transitionDuration = '0s';
+            rightElements = document.getElementById('vice-split-player-nn').getElementsByClassName('right');
+            for(var i=0; i<rightElements.length; i++) {
+                rightElements[i].style.transitionDuration = '0s';
+            };
+            
         
             // calculate clip position
             elementWidth = this.offsetWidth;
@@ -125,8 +151,10 @@
             mouseOver = true;
 
             // disable animation
-            rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
-            rightElement.style.transitionDuration = '0s';
+            rightElements = document.getElementById('vice-split-player-nn').getElementsByClassName('right');
+            for(var i=0; i<rightElements.length; i++) {
+                rightElements[i].style.transitionDuration = '0s';
+            }
         
             // calculate clip position
             elementWidth = this.offsetWidth;
@@ -153,9 +181,11 @@
         }
 
         
-        rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
-        rightElement.style.clipPath = 'polygon(0 0, ' + percentageHover + '% 0, ' + percentageHover + '% 100%, 0% 100%)';
-        rightElement.style.webkitClipPath = 'polygon(0 0, ' + percentageHover + '% 0, ' + percentageHover + '% 100%, 0% 100%)';
+        rightElements = document.getElementById('vice-split-player-nn').getElementsByClassName('right');
+        for(var i=0; i<rightElements.length; i++) {
+            rightElements[i].style.clipPath = 'polygon(0 0, ' + percentageHover + '% 0, ' + percentageHover + '% 100%, 0% 100%)';
+            rightElements[i].style.webkitClipPath = 'polygon(0 0, ' + percentageHover + '% 0, ' + percentageHover + '% 100%, 0% 100%)';
+        }
     }
 
 
@@ -164,9 +194,11 @@
         pointers.forEach(function(pointer, key) {
             if (pointer[0] === seconds && !mouseOver && pointers[key + 1] !== undefined){
                 timeToAnimate = pointers[key + 1][0] - pointer[0];
-                rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
-                rightElement.style.transitionDuration = timeToAnimate + 's';
-                rightElement.style.webkitTransitionDuration = timeToAnimate + 's';
+                rightElements = document.getElementById('vice-split-player-nn').getElementsByClassName('right');
+                for(var i=0; i<rightElements.length; i++) {
+                    rightElements[i].style.transitionDuration = timeToAnimate + 's';
+                    rightElements[i].style.webkitTransitionDuration = timeToAnimate + 's';
+                }
                 setClipPath(pointer[1]);
                 lastPoint = seconds;
             }
@@ -188,4 +220,16 @@
         if(mobile === false && tablet === true) { return 'tablet'; }
         if(mobile === false && tablet === false) { return 'desktop'; }
     }
+
+    function draw(v,c,w,h) {
+        if(v.paused || v.ended) return false;
+        c.drawImage(v,0,0,w,h);
+        setTimeout(draw,20,v,c,w,h);
+    }
+
+    setInterval(function(){
+        // rightElements = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
+        // rightElements.style.transitionDuration = '3s';
+        setClipPath(Math.floor(Math.random() * Math.floor(100)));
+    }, 5000);
 })();
