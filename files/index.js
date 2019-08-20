@@ -227,9 +227,10 @@
         setTimeout(draw,20,v,c,w,h);
     }
 
-    setInterval(function(){
-        // rightElements = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
-        // rightElements.style.transitionDuration = '3s';
-        setClipPath(Math.floor(Math.random() * Math.floor(100)));
-    }, 5000);
+    // setInterval(function(){
+    //     rightElements = document.getElementById('vice-split-player-nn').getElementsByClassName('right')[0];
+    //     rightElements.style.transitionDuration = '3s';
+
+    //     setClipPath(Math.floor(Math.random() * Math.floor(100)));
+    // }, 5000);
 })();
