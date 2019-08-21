@@ -56,7 +56,7 @@
                 handleAnimatedPoints(this.currentTime());
 
                 // if player is Xs out of sync. Correct it
-                outOfSync = leftplayer.currentTime() - rightplayer.currentTime();
+                var outOfSync = leftplayer.currentTime() - rightplayer.currentTime();
                 if(outOfSync >= 0.12 || outOfSync <= -0.12){
                     if(!outOfSyncCorrection){
                         outOfSyncCorrection = true;
@@ -102,19 +102,19 @@
         mouseOver = true;
 
         // disable animation
-        rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
+        var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
         rightElement.style.transitionDuration = '0s';
     
         // calculate clip position
-        elementWidth = this.offsetWidth;
+        var elementWidth = this.offsetWidth;
 
         if(e.type==="mousemove"){
-            pxHover = event.pageX - this.offsetLeft;
+            var pxHover = event.pageX - this.offsetLeft;
         }else{
-            pxHover = e.touches[0].pageX - this.offsetLeft;
+            var pxHover = e.touches[0].pageX - this.offsetLeft;
         }
 
-        percentageHover = (pxHover / elementWidth) * 100;
+        var percentageHover = (pxHover / elementWidth) * 100;
     
         // fix ugly last bit
         if (percentageHover >= 99.5) {
@@ -151,20 +151,20 @@
             handleAnimatedPoints(lastPointMin);
         }
         
-        rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
+        var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
         rightElement.style.width = videoPlayerSize * (percentageHover / 100) + 'px';
     }
 
 
     function handleAnimatedPoints(seconds) {
-        pointersLength = pointers.length;
+        var pointersLength = pointers.length;
         for(i = 0;i < pointersLength;i++){
             y = i + 1;
 
             if(pointers[y] !== undefined){
                 if(seconds >= pointers[i][0] && seconds <= pointers[y][0]){
-                    timeToAnimate = pointers[y][0] - pointers[i][0];
-                    rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
+                    var timeToAnimate = pointers[y][0] - pointers[i][0];
+                    var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
                     rightElement.style.transitionDuration = timeToAnimate + 's';
                     setClipPath(pointers[i][1]);
 
