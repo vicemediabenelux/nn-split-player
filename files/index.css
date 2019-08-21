@@ -47,7 +47,7 @@ body {
     display: none !important;
 }
 
-#vice-split-player-nn .rightFrame {
+#vice-split-player-nn .borderRight {
     border-right: 2px solid white;
 }
 
@@ -64,6 +64,11 @@ body {
     background-size: 50px 36.25px;
     background-repeat: no-repeat;
     background-position: center center;
+
+    transition-property: left;
+    transition-timing-function: ease-out;
+    transition-delay: 0s;
+    transition-duration: 0s;
 }
 
 #vice-split-player-nn #tutorial:after {

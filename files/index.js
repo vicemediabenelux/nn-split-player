@@ -4,7 +4,7 @@
         [0.5, 90],
         [1, 10],
         [2, 30],
-        [2.5, 60],
+        [2.5, 50],
         [3, 50],
         [4, 60],
         [5, 70],
@@ -23,6 +23,7 @@
     var dragging = false;
     var videoPlayerSize = 0;
     var tutorialAnimation = undefined;
+    var played = false;
 
     document.addEventListener("DOMContentLoaded", function (event) {
         // asign videos when loaded
@@ -40,30 +41,8 @@
         document.getElementsByClassName('rightOverflow')[0].style.width = videoPlayerSize + 'px';
         document.getElementsByClassName('leftFrame')[0].style.width = videoPlayerSize + 'px';
         document.getElementsByClassName('rightFrame')[0].style.width = (videoPlayerSize / 2) + 'px';
-
-        // set tutorial animation
-        tutorialAnimation = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
-        tutorialAnimation.classList += ' borderAnimationStart';
-        tutorialAnimation.addEventListener("transitionend", loopTutorialTransition, false);
-        tutorialAnimation.addEventListener("webkitTransitionEnd", loopTutorialTransition, false);
-        tutorialAnimation.addEventListener("mozTransitionEnd", loopTutorialTransition, false);
-        tutorialAnimation.addEventListener("msTransitionEnd", loopTutorialTransition, false);
-        tutorialAnimation.addEventListener("oTransitionEnd", loopTutorialTransition, false);
-
+        document.querySelector('#vice-split-player-nn #tutorial').style.left = (videoPlayerSize / 2) + 'px';
     });
-
-    // tutorial animation
-    function loopTutorialTransition(e) {
-        if (e.propertyName == "border-right-width") {
-            if (tutorialAnimation.classList.contains("borderAnimationStart")) {
-                tutorialAnimation.classList.remove("borderAnimationStart");
-                tutorialAnimation.classList += ' borderAnimationStop';
-            } else {
-                tutorialAnimation.classList.remove("borderAnimationStop");
-                tutorialAnimation.classList += ' borderAnimationStart';
-            }
-        }
-    }
 
     // handle click
     function handleClick(e) {
@@ -102,6 +81,15 @@
                         }
                     }
                 }
+
+                // stop tutorial
+                if(!played){
+                    setTimeout(function(){
+                        document.querySelector('#vice-split-player-nn #tutorial').style.display = 'none';
+                        document.getElementsByClassName('rightFrame')[0].classList.remove("borderRight");
+                    }, 3500);
+                    played = true;
+                }
             });
 
             // handle seeking of player 1
@@ -114,6 +102,7 @@
                 rightplayer.currentTime(this.currentTime());
                 rightplayer.play();
             });
+
         } else {
             leftplayer.pause();
             rightplayer.pause();
@@ -130,6 +119,9 @@
         // disable animation
         var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
         rightElement.style.transitionDuration = '0s';
+
+        var tutorialElement = document.querySelector('#vice-split-player-nn #tutorial');
+        tutorialElement.style.transitionDuration = '0s';
 
         // calculate clip position
         var elementWidth = this.offsetWidth;
@@ -177,6 +169,9 @@
 
         var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
         rightElement.style.width = videoPlayerSize * (percentageHover / 100) + 'px';
+
+        var tutorialElement = document.querySelector('#vice-split-player-nn #tutorial');
+        tutorialElement.style.left = videoPlayerSize * (percentageHover / 100) + 'px';
     }
 
 
@@ -190,6 +185,10 @@
                     var timeToAnimate = pointers[y][0] - pointers[i][0];
                     var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
                     rightElement.style.transitionDuration = timeToAnimate + 's';
+
+                    var tutorialElement = document.querySelector('#vice-split-player-nn #tutorial');
+                    tutorialElement.style.transitionDuration = timeToAnimate + 's';
+
                     setClipPath(pointers[i][1]);
 
                     lastPointMin = pointers[i][0];
