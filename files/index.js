@@ -22,6 +22,7 @@
     var outOfSyncCorrection = false;
     var dragging = false;
     var videoPlayerSize = 0;
+    var tutorialAnimation = undefined;
 
     document.addEventListener("DOMContentLoaded", function (event) {
         // asign videos when loaded
@@ -39,7 +40,30 @@
         document.getElementsByClassName('rightOverflow')[0].style.width = videoPlayerSize + 'px';
         document.getElementsByClassName('leftFrame')[0].style.width = videoPlayerSize + 'px';
         document.getElementsByClassName('rightFrame')[0].style.width = (videoPlayerSize / 2) + 'px';
+
+        // set tutorial animation
+        tutorialAnimation = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
+        tutorialAnimation.classList += ' borderAnimationStart';
+        tutorialAnimation.addEventListener("transitionend", loopTutorialTransition, false);
+        tutorialAnimation.addEventListener("webkitTransitionEnd", loopTutorialTransition, false);
+        tutorialAnimation.addEventListener("mozTransitionEnd", loopTutorialTransition, false);
+        tutorialAnimation.addEventListener("msTransitionEnd", loopTutorialTransition, false);
+        tutorialAnimation.addEventListener("oTransitionEnd", loopTutorialTransition, false);
+
     });
+
+    // tutorial animation
+    function loopTutorialTransition(e) {
+        if (e.propertyName == "border-right-width") {
+            if (tutorialAnimation.classList.contains("borderAnimationStart")) {
+                tutorialAnimation.classList.remove("borderAnimationStart");
+                tutorialAnimation.classList += ' borderAnimationStop';
+            } else {
+                tutorialAnimation.classList.remove("borderAnimationStop");
+                tutorialAnimation.classList += ' borderAnimationStart';
+            }
+        }
+    }
 
     // handle click
     function handleClick(e) {
