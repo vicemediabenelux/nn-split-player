@@ -1,6 +1,11 @@
 (function(){
     var pointers = [
-        [0, 10],
+        [0, 50],
+        [0.001, 10],
+        [0.25, 20],
+        [0.5, 30],
+        [0.7, 40],
+        [1.25, 50],
         [3, 60],
         [4, 60],
         [5, 70],
@@ -13,7 +18,8 @@
     var rightplayer = undefined;
     var playing = false;
     var mouseOver = false;
-    var lastPoint = 0;
+    var lastPointMin = 0;
+    var lastPointMax = 0;
     var device = detectDevice();
     var outOfSyncCorrection = false;
     var dragging = false;
@@ -158,7 +164,7 @@
         if (percentageHover.target) {
             // if mouse leave etc
             mouseOver = false;
-            handleAnimatedPoints(lastPoint);
+            handleAnimatedPoints(lastPointMin);
         }
 
         
@@ -168,16 +174,22 @@
 
 
     function handleAnimatedPoints(seconds) {
-        seconds = Math.floor(seconds);
-        pointers.forEach(function(pointer, key) {
-            if (pointer[0] === seconds && !mouseOver && pointers[key + 1] !== undefined){
-                timeToAnimate = pointers[key + 1][0] - pointer[0];
-                rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
-                rightElement.style.transitionDuration = timeToAnimate + 's';
-                setClipPath(pointer[1]);
-                lastPoint = seconds;
+        pointersLength = pointers.length;
+        for(i = 0;i < pointersLength;i++){
+            y = i + 1;
+
+            if(pointers[y] !== undefined){
+                if(seconds >= pointers[i][0] && seconds <= pointers[y][0]){
+                    timeToAnimate = pointers[y][0] - pointers[i][0];
+                    rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
+                    rightElement.style.transitionDuration = timeToAnimate + 's';
+                    setClipPath(pointers[i][1]);
+
+                    lastPointMin = pointers[i][0];
+                    lastPointMax = pointers[y][0];
+                }
             }
-        });
+        }
     }
 
     function detectDevice(){
