@@ -1,4 +1,4 @@
-(function(){
+(function () {
     var pointers = [
         [0, 50],
         [0.5, 90],
@@ -23,12 +23,13 @@
     var dragging = false;
     var videoPlayerSize = 0;
 
-    document.addEventListener("DOMContentLoaded", function(event) {
-        videojs.getPlayer('leftvideo').ready(function() {
+    document.addEventListener("DOMContentLoaded", function (event) {
+        // asign videos when loaded
+        videojs.getPlayer('leftvideo').ready(function () {
             leftplayer = this;
         });
 
-        videojs.getPlayer('rightvideo').ready(function() {
+        videojs.getPlayer('rightvideo').ready(function () {
             rightplayer = this;
         });
 
@@ -41,8 +42,8 @@
     });
 
     // handle click
-    function handleClick(e){
-        if (dragging){
+    function handleClick(e) {
+        if (dragging) {
             return;
         }
 
@@ -51,25 +52,26 @@
             rightplayer.play();
             playing = true;
 
-            // handle animation each second
-            leftplayer.on('timeupdate', function() {
+            leftplayer.on('timeupdate', function () {
+                // handle animation each second
                 handleAnimatedPoints(this.currentTime());
 
                 // if player is Xs out of sync. Correct it
                 var outOfSync = leftplayer.currentTime() - rightplayer.currentTime();
-                if(outOfSync >= 0.12 || outOfSync <= -0.12){
-                    if(!outOfSyncCorrection){
+                if (outOfSync >= 0.12 || outOfSync <= -0.12) {
+                    if (!outOfSyncCorrection) {
                         outOfSyncCorrection = true;
+
                         // since 2 video players are heavy on mobile. Instead of seeking, we use pause and play
-                        if(outOfSync>=0){
+                        if (outOfSync >= 0) {
                             leftplayer.pause();
-                            setTimeout(function (){
+                            setTimeout(function () {
                                 leftplayer.play();
                                 outOfSyncCorrection = false;
                             }, (outOfSync * 1000));
-                        }else{
+                        } else {
                             rightplayer.pause();
-                            setTimeout(function (){
+                            setTimeout(function () {
                                 rightplayer.play();
                                 outOfSyncCorrection = false;
                             }, (Math.abs(outOfSync) * 1000));
@@ -79,12 +81,12 @@
             });
 
             // handle seeking of player 1
-            leftplayer.on('seeking', function() {
+            leftplayer.on('seeking', function () {
                 rightplayer.pause();
             });
 
             // adjust player 2 to seeking of player 1
-            leftplayer.on('seeked', function() {
+            leftplayer.on('seeked', function () {
                 rightplayer.currentTime(this.currentTime());
                 rightplayer.play();
             });
@@ -98,29 +100,27 @@
         }
     }
 
-    function handleDrag(e){
+    function handleDrag(e) {
         mouseOver = true;
 
         // disable animation
         var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
         rightElement.style.transitionDuration = '0s';
-    
+
         // calculate clip position
         var elementWidth = this.offsetWidth;
-
-        if(e.type==="mousemove"){
+        if (e.type === "mousemove") {
             var pxHover = event.pageX - this.offsetLeft;
-        }else{
+        } else {
             var pxHover = e.touches[0].pageX - this.offsetLeft;
         }
-
         var percentageHover = (pxHover / elementWidth) * 100;
-    
+
         // fix ugly last bit
         if (percentageHover >= 99.5) {
             percentageHover = 100;
         }
-    
+
         setClipPath(percentageHover);
     }
 
@@ -129,10 +129,10 @@
     document.getElementById('vice-split-player-nn').addEventListener('touchend', handleClick);
 
     // corrections to the touchend
-    document.getElementById('vice-split-player-nn').addEventListener('touchmove', function(e){
+    document.getElementById('vice-split-player-nn').addEventListener('touchmove', function (e) {
         dragging = true;
     });
-    document.getElementById('vice-split-player-nn').addEventListener('touchstart', function(e){
+    document.getElementById('vice-split-player-nn').addEventListener('touchstart', function (e) {
         dragging = false;
     });
 
@@ -150,7 +150,7 @@
             mouseOver = false;
             handleAnimatedPoints(lastPointMin);
         }
-        
+
         var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
         rightElement.style.width = videoPlayerSize * (percentageHover / 100) + 'px';
     }
@@ -158,11 +158,11 @@
 
     function handleAnimatedPoints(seconds) {
         var pointersLength = pointers.length;
-        for(i = 0;i < pointersLength;i++){
+        for (i = 0; i < pointersLength; i++) {
             y = i + 1;
 
-            if(pointers[y] !== undefined){
-                if(seconds >= pointers[i][0] && seconds <= pointers[y][0]){
+            if (pointers[y] !== undefined) {
+                if (seconds >= pointers[i][0] && seconds <= pointers[y][0]) {
                     var timeToAnimate = pointers[y][0] - pointers[i][0];
                     var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
                     rightElement.style.transitionDuration = timeToAnimate + 's';
