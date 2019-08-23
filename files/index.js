@@ -1,16 +1,45 @@
 (function () {
     var pointers = [
         [0, 50],
-        [0.5, 90],
-        [1, 10],
-        [2, 30],
-        [2.5, 50],
-        [3, 50],
-        [4, 60],
-        [5, 70],
-        [6, 70],
-        [9, 20],
-        [10, 20],
+        [0.1, 50],
+        [0.9, 50],
+        [1.5, 72],
+        [1.7, 72],
+        [2.6,36],
+        [3.4,50],
+        [15,50],
+        [15.1,100],
+        [18,100],
+        [19.4,50],
+        [38.6,50],
+        [39.4,58],
+        [42,58],
+        [42.5,50],
+        [51,50],
+        [51.3,36],
+        [55,36],
+        [56,50],
+        [58.4,50],
+        [60,67],
+        [61.4,67],
+        [63,50],
+        [69,50],
+        [70.5,56],
+        [75.8,56],
+        [77,41],
+        [83.9,41],
+        [85,100],
+        [91.9,100],
+        [95,0],
+        [100,0],
+        [101.8,50],
+        [119.6,50],
+        [120,100],
+        [123.8,100],
+        [125,50],
+        [146,50],
+        [146.8,100],
+        [166,100]
     ];
 
     var leftplayer = undefined;
@@ -24,6 +53,7 @@
     var videoPlayerSize = 0;
     var tutorialAnimation = undefined;
     var played = false;
+    var tutorial = false;
 
     document.addEventListener("DOMContentLoaded", function (event) {
         // asign videos when loaded
@@ -46,7 +76,7 @@
 
     // handle click
     function handleClick(e) {
-        if (dragging) {
+        if (dragging || tutorial) {
             return;
         }
 
@@ -56,9 +86,6 @@
             playing = true;
 
             leftplayer.on('timeupdate', function () {
-                // handle animation each second
-                handleAnimatedPoints(this.currentTime());
-
                 // if player is Xs out of sync. Correct it
                 var outOfSync = leftplayer.currentTime() - rightplayer.currentTime();
                 if (outOfSync >= 0.12 || outOfSync <= -0.12) {
@@ -82,13 +109,17 @@
                     }
                 }
 
-                // stop tutorial
+                // handle tutorial
                 if(!played){
+                    tutorial = true;
+                    mouseOver = false;
+
                     setTimeout(function(){
                         document.querySelector('#vice-split-player-nn #tutorial').style.display = 'none';
                         document.getElementsByClassName('rightFrame')[0].classList.remove("borderRight");
-                    }, 3500);
-                    played = true;
+                        tutorial = false;
+                        played = true;
+                    }, 4500);
                 }
             });
 
@@ -114,6 +145,10 @@
     }
 
     function handleDrag(e) {
+        if(tutorial){
+            return;
+        }
+
         mouseOver = true;
 
         // disable animation
@@ -179,17 +214,21 @@
         var pointersLength = pointers.length;
         for (i = 0; i < pointersLength; i++) {
             y = i + 1;
+            x = i - 1;
 
-            if (pointers[y] !== undefined) {
+            if (pointers[y] !== undefined && mouseOver === false && pointers[x] !== undefined) {
                 if (seconds >= pointers[i][0] && seconds <= pointers[y][0]) {
-                    var timeToAnimate = pointers[y][0] - pointers[i][0];
+                    var timeToAnimate = pointers[i][0] - pointers[x][0];
                     var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
                     rightElement.style.transitionDuration = timeToAnimate + 's';
+                    rightElement.style.transitionTimingFunction = 'cubic-bezier(0.47, 0, 0.3, 1)';
 
                     var tutorialElement = document.querySelector('#vice-split-player-nn #tutorial');
                     tutorialElement.style.transitionDuration = timeToAnimate + 's';
-
+										tutorialElement.style.transitionTimingFunction = 'cubic-bezier(0.47, 0, 0.3, 1)';
                     setClipPath(pointers[i][1]);
+
+                    console.log(pointers[i], timeToAnimate);
 
                     lastPointMin = pointers[i][0];
                     lastPointMax = pointers[y][0];
@@ -197,4 +236,12 @@
             }
         }
     }
+
+
+    setInterval(function(){
+        // handle animation more accurate then brightcove
+        if (leftplayer !== undefined && rightplayer !== undefined && playing === true) {
+            handleAnimatedPoints(leftplayer.currentTime());
+        }
+    }, 50);
 })();
