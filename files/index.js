@@ -1,12 +1,12 @@
 (function () {
     var pointers = [
         [0, 50],
-        [0.1, 50],
-        [0.9, 50],
-        [1.5, 72],
-        [1.7, 72],
-        [2.6,36],
-        [3.4,50],
+        [0.2, 50],
+        [0.5, 50],
+        [1.3, 72],
+        [2.4,36],
+        [3.4,36],
+        [3.8,50],
         [15,50],
         [15.1,100],
         [18,100],
@@ -54,6 +54,7 @@
     var tutorialAnimation = undefined;
     var played = false;
     var tutorial = false;
+    var mouseDrag = false;
 
     document.addEventListener("DOMContentLoaded", function (event) {
         // asign videos when loaded
@@ -145,7 +146,7 @@
     }
 
     function handleDrag(e) {
-        if(tutorial){
+        if(tutorial || !dragging){
             return;
         }
 
@@ -178,6 +179,17 @@
     // handle clicks
     document.getElementById('vice-split-player-nn').addEventListener('click', handleClick);
     document.getElementById('vice-split-player-nn').addEventListener('touchend', handleClick);
+
+    document.getElementById('vice-split-player-nn').addEventListener('mousedown', function (e){
+        leftplayer.play();
+        rightplayer.play();
+        dragging = true;
+    });
+    document.getElementById('vice-split-player-nn').addEventListener('mouseup', function (e){
+        playing = false;
+        dragging = false;
+        mouseOver = false;
+    });
 
     // corrections to the touchend
     document.getElementById('vice-split-player-nn').addEventListener('touchmove', function (e) {
@@ -227,8 +239,6 @@
                     tutorialElement.style.transitionDuration = timeToAnimate + 's';
 										tutorialElement.style.transitionTimingFunction = 'cubic-bezier(0.47, 0, 0.3, 1)';
                     setClipPath(pointers[i][1]);
-
-                    console.log(pointers[i], timeToAnimate);
 
                     lastPointMin = pointers[i][0];
                     lastPointMax = pointers[y][0];
