@@ -9,6 +9,11 @@ body {
     width: 100%;
     padding-top: 56.25%;
     background-color: grey;
+    cursor: grab;
+}
+
+#vice-split-player-nn:active{
+	cursor: grabbing;
 }
 
 #vice-split-player-nn .side {

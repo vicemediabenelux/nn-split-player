@@ -1,11 +1,9 @@
 (function () {
     var pointers = [
         [0, 50],
-        [0.2, 50],
-        [0.5, 50],
-        [1.3, 72],
-        [2.4,36],
-        [3.4,36],
+        [0.5, 72],
+        [1.7,36],
+        [3.2,36],
         [3.8,50],
         [15,50],
         [15.1,100],
@@ -45,6 +43,7 @@
     var leftplayer = undefined;
     var rightplayer = undefined;
     var playing = false;
+    var rightPlaying = false;
     var mouseOver = false;
     var lastPointMin = 0;
     var lastPointMax = 0;
@@ -87,42 +86,48 @@
             rightplayer.play();
             playing = true;
 
-            leftplayer.on('timeupdate', function () {
-                // if player is Xs out of sync. Correct it
-                var outOfSync = leftplayer.currentTime() - rightplayer.currentTime();
-                if (outOfSync >= 0.12 || outOfSync <= -0.12) {
-                    if (!outOfSyncCorrection) {
-                        outOfSyncCorrection = true;
+            rightplayer.on('timeupdate', function () {
+                rightPlaying = true;
+            });
 
-                        // since 2 video players are heavy on mobile. Instead of seeking, we use pause and play
-                        if (outOfSync >= 0) {
-                            leftplayer.pause();
-                            setTimeout(function () {
-                                leftplayer.play();
-                                outOfSyncCorrection = false;
-                            }, (outOfSync * 1000));
-                        } else {
-                            rightplayer.pause();
-                            setTimeout(function () {
-                                rightplayer.play();
-                                outOfSyncCorrection = false;
-                            }, (Math.abs(outOfSync) * 1000));
+            leftplayer.on('timeupdate', function () {
+                if(rightPlaying){
+                    // if player is Xs out of sync. Correct it
+                    var outOfSync = leftplayer.currentTime() - rightplayer.currentTime();
+                    if (outOfSync >= 0.12 || outOfSync <= -0.12) {
+                        if (!outOfSyncCorrection) {
+                            outOfSyncCorrection = true;
+
+                            // since 2 video players are heavy on mobile. Instead of seeking, we use pause and play
+                            if (outOfSync >= 0) {
+                                leftplayer.pause();
+                                setTimeout(function () {
+                                    leftplayer.play();
+                                    outOfSyncCorrection = false;
+                                }, (outOfSync * 1000));
+                            } else {
+                                rightplayer.pause();
+                                setTimeout(function () {
+                                    rightplayer.play();
+                                    outOfSyncCorrection = false;
+                                }, (Math.abs(outOfSync) * 1000));
+                            }
                         }
                     }
-                }
 
-                // handle tutorial
-                if(!played){
-                    tutorial = true;
-                    mouseOver = false;
+                    // handle tutorial
+                    if(!played){
+                        tutorial = true;
+                        mouseOver = false;
 
-                    setTimeout(function(){
-                        document.querySelector('#vice-split-player-nn #tutorial').style.display = 'none';
-                        document.getElementsByClassName('rightFrame')[0].classList.remove("borderRight");
-                        tutorial = false;
-                        played = true;
-                    }, 4500);
-                }
+                        setTimeout(function(){
+                            document.querySelector('#vice-split-player-nn #tutorial').style.display = 'none';
+                            document.getElementsByClassName('rightFrame')[0].classList.remove("borderRight");
+                            tutorial = false;
+                            played = true;
+                        }, 4500);
+                    }
+              }
             });
 
             // handle seeking of player 1
@@ -135,6 +140,7 @@
                 rightplayer.currentTime(this.currentTime());
                 rightplayer.play();
             });
+            
 
         } else {
             leftplayer.pause();
@@ -155,10 +161,15 @@
 
         // disable animation
         var rightElement = document.getElementById('vice-split-player-nn').getElementsByClassName('rightFrame')[0];
-        rightElement.style.transitionDuration = '0s';
-
         var tutorialElement = document.querySelector('#vice-split-player-nn #tutorial');
-        tutorialElement.style.transitionDuration = '0s';
+        
+        if((Date.now() - mouseDragTimer <= 200)){
+            rightElement.style.transitionDuration = '0.2s';
+            tutorialElement.style.transitionDuration = '0.2s';
+        }else{
+            rightElement.style.transitionDuration = '0s';
+            tutorialElement.style.transitionDuration = '0s';
+        }
 
         // calculate clip position
         var elementWidth = this.offsetWidth;
