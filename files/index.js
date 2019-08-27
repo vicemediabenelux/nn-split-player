@@ -197,6 +197,11 @@
         rightplayer.play();
         dragging = true;
         mouseDragTimer = Date.now();
+
+        document.getElementById('vice-split-player-nn').dispatchEvent(new MouseEvent('mousemove', {
+            bubbles: true,
+            clientX: e.pageX
+        }));
     });
     document.getElementById('vice-split-player-nn').addEventListener('mouseup', function (e){
         // cool down drag vs click
