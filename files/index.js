@@ -189,7 +189,7 @@
     });
     document.getElementById('vice-split-player-nn').addEventListener('mouseup', function (e){
         // cool down drag vs click
-        if((Date.now() - mouseDragTimer >= 100)){
+        if((Date.now() - mouseDragTimer >= 300)){
             playing = false;
         }
         
