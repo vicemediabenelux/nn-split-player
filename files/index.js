@@ -55,6 +55,7 @@
     var played = false;
     var tutorial = false;
     var mouseDrag = false;
+    var mouseDragTimer = Date.now();
 
     document.addEventListener("DOMContentLoaded", function (event) {
         // asign videos when loaded
@@ -184,9 +185,14 @@
         leftplayer.play();
         rightplayer.play();
         dragging = true;
+        mouseDragTimer = Date.now();
     });
     document.getElementById('vice-split-player-nn').addEventListener('mouseup', function (e){
-        playing = false;
+        // cool down drag vs click
+        if((Date.now() - mouseDragTimer >= 100)){
+            playing = false;
+        }
+        
         dragging = false;
         mouseOver = false;
     });
