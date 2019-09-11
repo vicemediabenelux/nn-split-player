@@ -48,6 +48,7 @@
     var lastPointMin = 0;
     var lastPointMax = 0;
     var outOfSyncCorrection = false;
+    var outOfSyncArray = [0,0,0,0,0];
     var dragging = false;
     var videoPlayerSize = 0;
     var tutorialAnimation = undefined;
@@ -94,7 +95,12 @@
                 if(rightPlaying){
                     // if player is Xs out of sync. Correct it
                     var outOfSync = leftplayer.currentTime() - rightplayer.currentTime();
-                    if (outOfSync >= 0.12 || outOfSync <= -0.12) {
+                    outOfSyncArray.shift();
+                    outOfSyncArray.push(outOfSync);
+                    var outOfSyncCheck = outOfSyncChecker(outOfSyncArray, outOfSync);
+                    outOfSync = average(outOfSyncArray);
+
+                    if (outOfSyncCheck && (outOfSync >= 0.12 || outOfSync <= -0.12)) {
                         if (!outOfSyncCorrection) {
                             outOfSyncCorrection = true;
 
@@ -104,29 +110,30 @@
                                 setTimeout(function () {
                                     leftplayer.play();
                                     outOfSyncCorrection = false;
-                                }, (outOfSync * 1000));
+                                }.bind(outOfSyncCorrection), (Math.round(Math.abs(outOfSync) * 1000)));
                             } else {
                                 rightplayer.pause();
                                 setTimeout(function () {
                                     rightplayer.play();
                                     outOfSyncCorrection = false;
-                                }, (Math.abs(outOfSync) * 1000));
+                                }.bind(outOfSyncCorrection), (Math.round(Math.abs(outOfSync) * 1000)));
                             }
                         }
                     }
 
                     // handle tutorial
                     if(!played){
+	                 
                         tutorial = true;
                         mouseOver = false;
-
                         setTimeout(function(){
-                            document.querySelector('#vice-split-player-nn #tutorial').style.display = 'none';
+                            document.querySelector('#vice-split-player-nn #tutorial').style.opacity = '0';
                             document.getElementsByClassName('rightFrame')[0].classList.remove("borderRight");
                             tutorial = false;
                             played = true;
                         }, 4500);
                     }
+
               }
             });
 
@@ -139,6 +146,7 @@
             leftplayer.on('seeked', function () {
                 rightplayer.currentTime(this.currentTime());
                 rightplayer.play();
+                playing = true;
             });
             
 
@@ -146,7 +154,6 @@
             leftplayer.pause();
             rightplayer.pause();
             playing = false;
-
             // always adjust player after pause
             rightplayer.currentTime(leftplayer.currentTime());
         }
@@ -243,13 +250,12 @@
         tutorialElement.style.left = videoPlayerSize * (percentageHover / 100) + 'px';
     }
 
-
     function handleAnimatedPoints(seconds) {
         var pointersLength = pointers.length;
         for (i = 0; i < pointersLength; i++) {
             y = i + 1;
             x = i - 1;
-
+                        
             if (pointers[y] !== undefined && mouseOver === false && pointers[x] !== undefined) {
                 if (seconds >= pointers[i][0] && seconds <= pointers[y][0]) {
                     var timeToAnimate = pointers[i][0] - pointers[x][0];
@@ -264,11 +270,39 @@
 
                     lastPointMin = pointers[i][0];
                     lastPointMax = pointers[y][0];
+                    
                 }
             }
         }
     }
 
+    function outOfSyncChecker(array, outOfSync) {
+        var checks = [];
+        array.forEach(function(item){
+            if (outOfSync >= 0.12 || outOfSync <= -0.12) {
+                checks.push(true);
+            }
+        });
+
+        if(checks.length == array.length){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function average(array) {
+        var sum = 0;
+        var sumAmount = []
+        array.forEach(function(item){
+            if(item<=1){
+                sum += item;
+                sumAmount.push(true);
+            }
+        });
+
+        return sum / sumAmount.length;
+    }
 
     setInterval(function(){
         // handle animation more accurate then brightcove

@@ -26,11 +26,11 @@ body {
 
 #vice-split-player-nn .side.right {
     pointer-events: none;
+    overflow: hidden;
 }
 
 #vice-split-player-nn .rightFrame, #vice-split-player-nn .leftFrame{
     overflow: hidden;
-
     transition-property: width;
     transition-timing-function: ease-out;
     transition-delay: 0s;
@@ -53,14 +53,14 @@ body {
 }
 
 #vice-split-player-nn .borderRight {
-    border-right: 2px solid white;
+/*     border-right: 2px solid white; */
 }
 
 #vice-split-player-nn #tutorial {
     position: absolute;
     top: 15%;
     left: 50%;
-    transform: translateX(-22px) translateY(-50%);
+    transform: translateX(-24px) translateY(-50%);
     color: white;
     z-index: 1000;
     width: 50px;
@@ -70,7 +70,7 @@ body {
     background-repeat: no-repeat;
     background-position: center center;
 
-    transition-property: left;
+    transition-property: left, opacity;
     transition-timing-function: ease-out;
     transition-delay: 0s;
     transition-duration: 0s;
@@ -79,3 +79,85 @@ body {
 #vice-split-player-nn #tutorial:after {
     content: '\200b';
 }
+
+.tut-overlay{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	background-size: contain;
+	background-position: center top;
+	background-repeat: no-repeat;
+}
+
+.rightOverflow{
+	position: relative;
+}
+
+
+
+
+#tut-left{
+	background-image: url(right-red.png);
+	right: 50%;
+}
+
+@keyframes rightToLeft{
+		0%{ 	left: 50%;}
+		30%{	left:0;}
+		46%{ left: 0%;}
+		100%{left: 100%;}
+}
+
+@keyframes leftToRight{
+		0%{ 	right: 50%;}
+		28%{	right:0;}
+		66%{ right: 0%;}
+		100%{right: 100%;}
+}
+
+
+#tut-right.animate{
+		animation: rightToLeft 2.5s cubic-bezier(0.47, 0, 0.3, 1) forwards;
+}
+
+#tut-left.animate{
+		animation: leftToRight 3.7s cubic-bezier(0.47, 0, 0.3, 1) forwards 1s;
+}
+
+
+
+#tut-right{
+	background-image: url(left-grey.png);
+	left: 50%
+}
+
+
+.rightFrame, .leftFrame {
+	position: relative;
+}
+
+.side.right{
+	z-index: 100;
+}
+
+video-js .vjs-time-control.vjs-current-time, video-js .vjs-time-control.vjs-time-divider, video-js .vjs-time-control, video-js .vjs-time-control .vjs-duration-display{
+	display: none;
+}
+
+.vjs-paused.vjs-has-started .vjs-big-play-button {
+  display: block;
+}
+
+.vjs-paused.vjs-has-started.vjs-ended .vjs-big-play-button{
+    margin-top: 0px;
+}
+
+.vjs-paused.vjs-has-started.vjs-ended .vjs-big-play-button .vjs-icon-placeholder:before{
+    content: "";
+    background: url(replay-arrow-white.svg);
+    background-repeat: no-repeat;
+    background-size: 50%;
+    background-position: 48% 44%;
+}
+
