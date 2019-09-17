@@ -100,7 +100,7 @@
                     var outOfSyncCheck = outOfSyncChecker(outOfSyncArray, outOfSync);
                     outOfSync = average(outOfSyncArray);
 
-                    if (outOfSyncCheck && (outOfSync >= 0.08 || outOfSync <= -0.08)) {
+                    if (outOfSyncCheck && (outOfSync >= 0.10 || outOfSync <= -0.10)) {
                         if (!outOfSyncCorrection) {
                             outOfSyncCorrection = true;
 
@@ -279,7 +279,7 @@
     function outOfSyncChecker(array, outOfSync) {
         var checks = [];
         array.forEach(function(item){
-            if (outOfSync >= 0.08 || outOfSync <= -0.08) {
+            if (outOfSync >= 0.10 || outOfSync <= -0.10) {
                 checks.push(true);
             }
         });
