@@ -161,3 +161,6 @@ video-js .vjs-time-control.vjs-current-time, video-js .vjs-time-control.vjs-time
     background-position: 48% 44%;
 }
 
+.video-js .vjs-tech{
+	outline: none!important;
+}
